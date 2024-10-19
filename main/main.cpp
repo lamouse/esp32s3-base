@@ -13,6 +13,7 @@
 #include "esp_flash.h"
 #include "esp_system.h"
 #include "esp_log.h"
+#include "screen.hpp"
 
 
 static const char* TAG = "main";

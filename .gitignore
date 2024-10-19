@@ -2,3 +2,4 @@
 /.cache
 /.devcontainer
 /.vscode
+.DS_Store
