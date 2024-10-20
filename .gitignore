@@ -1,5 +1,5 @@
 /build
 /.cache
 /.devcontainer
-/.vscode
+.vscode/settings.json
 .DS_Store

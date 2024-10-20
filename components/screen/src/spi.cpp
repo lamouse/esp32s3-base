@@ -27,11 +27,11 @@ SPI::SPI(uint16_t width, lcd_flush_callback_t callback) {
         .sclk_io_num = 18,
         .quadwp_io_num = -1,
         .quadhd_io_num = -1,
-        .max_transfer_sz =  width * 40 * sizeof(uint8_t),
+        //.max_transfer_sz =  width * 40 * sizeof(uint8_t),
         .flags = SPICOMMON_BUSFLAG_MASTER,
     };
     ESP_ERROR_CHECK(spi_bus_initialize(HSPI_HOST, &buscfg, SPI_DMA_CH_AUTO));
-    
+
     gpio_config_t bl_gpio_config = {
         //TODO: Change to correct pins
         .pin_bit_mask = 1 << GPIO_NUM_17,
@@ -79,8 +79,8 @@ SPI::SPI(uint16_t width, lcd_flush_callback_t callback) {
     vTaskDelay(pdMS_TO_TICKS(150));
     esp_lcd_panel_io_tx_param(lcd_io_handle, LCD_CMD_SLPOUT, nullptr, 0);
     vTaskDelay(pdMS_TO_TICKS(200));
-    esp_lcd_panel_io_tx_param(lcd_io_handle,LCD_CMD_COLMOD,(uint8_t[]) {0x55,}, 1);  //选择RGB数据格式，0x55:RGB565,0x66:RGB666
-    esp_lcd_panel_io_tx_param(lcd_io_handle, 0xb0, (uint8_t[]) {0x00, 0xF0},2);
+    // esp_lcd_panel_io_tx_param(lcd_io_handle,LCD_CMD_COLMOD,(uint8_t[]) {0x55,}, 1);  //选择RGB数据格式，0x55:RGB565,0x66:RGB666
+    // esp_lcd_panel_io_tx_param(lcd_io_handle, 0xb0, (uint8_t[]) {0x00, 0xF0},2);
 
     esp_lcd_panel_io_tx_param(lcd_io_handle,LCD_CMD_INVON,NULL,0);     //颜色翻转
     esp_lcd_panel_io_tx_param(lcd_io_handle,LCD_CMD_NORON,NULL,0);     //普通显示模式
@@ -102,7 +102,7 @@ SPI::SPI(uint16_t width, lcd_flush_callback_t callback) {
             break;
         default:break;
     }
-    esp_lcd_panel_io_tx_param(lcd_io_handle,LCD_CMD_MADCTL,(uint8_t[]) {spin_type,}, 1);   //屏旋转方向
+    //esp_lcd_panel_io_tx_param(lcd_io_handle,LCD_CMD_MADCTL,(uint8_t[]) {spin_type,}, 1);   //屏旋转方向
     vTaskDelay(pdMS_TO_TICKS(150));
     esp_lcd_panel_io_tx_param(lcd_io_handle,LCD_CMD_DISPON,NULL,0);    //打开显示
     vTaskDelay(pdMS_TO_TICKS(300));
@@ -111,26 +111,26 @@ SPI::SPI(uint16_t width, lcd_flush_callback_t callback) {
 SPI::~SPI() {}
 
 void SPI::write(int x1, int y1, int x2, int y2, void* data) {
-       if(x2 <= x1 || y2 <= y1)
-    {
-        lcd_flush_callback(nullptr);
-        return;
-    }
-    esp_lcd_panel_io_tx_param(lcd_io_handle, LCD_CMD_CASET, (uint8_t[]) {
-        (x1 >> 8) & 0xFF,
-        x1 & 0xFF,
-        ((x2 - 1) >> 8) & 0xFF,
-        (x2 - 1) & 0xFF,
-    }, 4);
-    esp_lcd_panel_io_tx_param(lcd_io_handle, LCD_CMD_RASET, (uint8_t[]) {
-        (y1 >> 8) & 0xFF,
-        y1 & 0xFF,
-        ((y2 - 1) >> 8) & 0xFF,
-        (y2 - 1) & 0xFF,
-    }, 4);
-    // transfer frame buffer
-    size_t len = (x2 - x1) * (y2 - y1) * 2;
-    esp_lcd_panel_io_tx_color(lcd_io_handle, LCD_CMD_RAMWR, data, len);
+    //    if(x2 <= x1 || y2 <= y1)
+    // {
+    //     lcd_flush_callback(nullptr);
+    //     return;
+    // }
+    // esp_lcd_panel_io_tx_param(lcd_io_handle, LCD_CMD_CASET, (uint8_t[]) {
+    //     (x1 >> 8) & 0xFF,
+    //     x1 & 0xFF,
+    //     ((x2 - 1) >> 8) & 0xFF,
+    //     (x2 - 1) & 0xFF,
+    // }, 4);
+    // esp_lcd_panel_io_tx_param(lcd_io_handle, LCD_CMD_RASET, (uint8_t[]) {
+    //     (y1 >> 8) & 0xFF,
+    //     y1 & 0xFF,
+    //     ((y2 - 1) >> 8) & 0xFF,
+    //     (y2 - 1) & 0xFF,
+    // }, 4);
+    // // transfer frame buffer
+    // size_t len = (x2 - x1) * (y2 - y1) * 2;
+    // esp_lcd_panel_io_tx_color(lcd_io_handle, LCD_CMD_RAMWR, data, len);
 }
 void SPI::read(uint8_t *data, size_t len) {}
 void SPI::transfer(uint8_t *data, size_t len) {}

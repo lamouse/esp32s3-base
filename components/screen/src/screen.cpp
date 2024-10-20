@@ -16,17 +16,17 @@ namespace{
 
 }
 
-  
+
 screen::screen(/* args */): spi(320, [](void* data){})
 {
   lv_init();
-  
+
 }
 
 
 void screen::flush(int x1, int y1, int x2, int y2, void* data){
   // define an area of frame memory where MCU can access
- 
+
 }
 
 void screen::lv_display_init(void){
@@ -39,8 +39,7 @@ void screen::lv_display_init(void){
         ESP_LOGE(TAG, "No memory for LVGL display buffer");
         esp_system_abort("Memory allocation failed");
     }
-    lv_display_create()
-    
+
 }
 
 screen::~screen()
