@@ -39,7 +39,7 @@ void screen::lv_display_init(void){
         ESP_LOGE(TAG, "No memory for LVGL display buffer");
         esp_system_abort("Memory allocation failed");
     }
-
+  //lv_display_set_buffers()
 }
 
 screen::~screen()

@@ -14,11 +14,15 @@
 #include "esp_system.h"
 #include "esp_log.h"
 #include "screen.hpp"
+#include "driver/gpio.h"
 
 
 static const char* TAG = "main";
 
 void task(void* parameter){
+    gpio_set_direction(GPIO_NUM_48, GPIO_MODE_OUTPUT);
+    gpio_set_level(GPIO_NUM_48, 1);
+
     while(1){
         ESP_LOGI(TAG,"Hello from task\n");
         vTaskDelay(pdMS_TO_TICKS(1000));
