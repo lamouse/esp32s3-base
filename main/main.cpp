@@ -15,6 +15,8 @@
 #include "esp_log.h"
 #include "screen.hpp"
 #include "driver/gpio.h"
+#include "wifi.hpp"
+#include "DHT11.hpp"
 
 
 static const char* TAG = "main";
@@ -22,9 +24,11 @@ static const char* TAG = "main";
 void task(void* parameter){
     gpio_set_direction(GPIO_NUM_48, GPIO_MODE_OUTPUT);
     gpio_set_level(GPIO_NUM_48, 1);
+    sensor::DHT11 dht11(GPIO_NUM_2);
 
     while(1){
-        ESP_LOGI(TAG,"Hello from task\n");
+        auto [t, h] = dht11.get();
+        printf("----t = %f, s=%d\n", float(t) / 10, h);
         vTaskDelay(pdMS_TO_TICKS(1000));
     }
 }
@@ -55,5 +59,7 @@ extern "C" void app_main(void)
     printf("Minimum free heap size: %" PRIu32 " bytes\n", esp_get_minimum_free_heap_size());
 
     fflush(stdout);
-    xTaskCreatePinnedToCore(task, "test task", 2048, nullptr, 3, nullptr, 1);
+    device::wifi wifi("showmeyourbp", "WW6639270");
+    task(nullptr);
+    //xTaskCreatePinnedToCore(task, "test task", 2048, nullptr, 3, nullptr, 1);
 }
