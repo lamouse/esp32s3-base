@@ -17,49 +17,47 @@
 #include "driver/gpio.h"
 #include "wifi.hpp"
 #include "DHT11.hpp"
+#include "lvgl.h"
+#include <widgets/lv_demo_widgets.h>
+#include "lv_demos.h"
+#include "key.hpp"
 
+static const char *TAG = "main";
 
-static const char* TAG = "main";
-
-void task(void* parameter){
-    gpio_set_direction(GPIO_NUM_48, GPIO_MODE_OUTPUT);
-    gpio_set_level(GPIO_NUM_48, 1);
-    sensor::DHT11 dht11(GPIO_NUM_2);
-
-    while(1){
-        auto [t, h] = dht11.get();
-        printf("----t = %f, s=%d\n", float(t) / 10, h);
-        vTaskDelay(pdMS_TO_TICKS(1000));
+void task(void *parameter)
+{
+    // gpio_set_direction(GPIO_NUM_48, GPIO_MODE_OUTPUT);
+    // gpio_set_level(GPIO_NUM_48, 1);
+    // sensor::DHT11 dht11(GPIO_NUM_2);
+    // gpio_set_level(GPIO_NUM_0,0);
+    // display::screen screen;
+    // lv_demo_widgets();
+    // vTaskDelay(pdMS_TO_TICKS(1000));
+    hardware::key k(GPIO_NUM_0);
+    while (1)
+    {
+        // auto [t, h] = dht11.get();
+        // printf("----t = %f, s=%d\n", float(t) / 10, h);
+        auto state = k.get_state();
+        switch (state)
+        {
+        case hardware::key_stat::no_action:
+            break;
+        case hardware::key_stat::put_down:
+            printf("----key put down\n");
+            break;
+        case hardware::key_stat::put_up:
+            printf("----key put up\n");
+            break;
+        }
+        vTaskDelay(pdMS_TO_TICKS(100));
     }
+    // lv_task_handler();
 }
 
 extern "C" void app_main(void)
 {
-    printf("Hello world!\n");
-
-    /* Print chip information */
-    esp_chip_info_t chip_info;
-    uint32_t flash_size;
-    esp_chip_info(&chip_info);
-    printf("This is %s chip with %d CPU core(s), %s%s%s%s, ",
-           CONFIG_IDF_TARGET,
-           chip_info.cores,
-           (chip_info.features & CHIP_FEATURE_WIFI_BGN) ? "WiFi/" : "",
-           (chip_info.features & CHIP_FEATURE_BT) ? "BT" : "",
-           (chip_info.features & CHIP_FEATURE_BLE) ? "BLE" : "",
-           (chip_info.features & CHIP_FEATURE_IEEE802154) ? ", 802.15.4 (Zigbee/Thread)" : "");
-
-    unsigned major_rev = chip_info.revision / 100;
-    unsigned minor_rev = chip_info.revision % 100;
-    printf("silicon revision v%d.%d, ", major_rev, minor_rev);
-    ESP_ERROR_CHECK(esp_flash_get_size(NULL, &flash_size));
-    printf("%" PRIu32 "MB %s flash\n", flash_size / (uint32_t)(1024 * 1024),
-           (chip_info.features & CHIP_FEATURE_EMB_FLASH) ? "embedded" : "external");
-
-    printf("Minimum free heap size: %" PRIu32 " bytes\n", esp_get_minimum_free_heap_size());
-
-    fflush(stdout);
     device::wifi wifi("showmeyourbp", "WW6639270");
     task(nullptr);
-    //xTaskCreatePinnedToCore(task, "test task", 2048, nullptr, 3, nullptr, 1);
+    //xTaskCreatePinnedToCore(task, "test task", 2048, nullptr, 3, nullptr, 0);
 }
