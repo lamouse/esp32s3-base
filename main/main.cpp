@@ -21,6 +21,7 @@
 #include <widgets/lv_demo_widgets.h>
 #include "lv_demos.h"
 #include "key.hpp"
+#include "QMI8658C.hpp"
 
 static const char *TAG = "main";
 
@@ -34,8 +35,10 @@ void task(void *parameter)
     // lv_demo_widgets();
     // vTaskDelay(pdMS_TO_TICKS(1000));
     hardware::key k(GPIO_NUM_0);
+    sensor::QMI8658C qmi(I2C_NUM_0, GPIO_NUM_1, GPIO_NUM_2, 400 * 1000);
     while (1)
     {
+        vTaskDelay(pdMS_TO_TICKS(1000));
         // auto [t, h] = dht11.get();
         // printf("----t = %f, s=%d\n", float(t) / 10, h);
         auto state = k.get_state();
@@ -50,7 +53,15 @@ void task(void *parameter)
             printf("----key put up\n");
             break;
         }
-        vTaskDelay(pdMS_TO_TICKS(100));
+        try
+        {
+            auto qmi_data = qmi.read();
+            ESP_LOGI(TAG, "angle_x = %.1f  angle_y = %.1f angle_z = %.1f", qmi_data.x, qmi_data.y, qmi_data.z);
+        }
+        catch (const std::exception &e)
+        {
+            ESP_LOGE(TAG, "QMI8658C err: %s", e.what());
+        }
     }
     // lv_task_handler();
 }
@@ -59,5 +70,5 @@ extern "C" void app_main(void)
 {
     device::wifi wifi("showmeyourbp", "WW6639270");
     task(nullptr);
-    //xTaskCreatePinnedToCore(task, "test task", 2048, nullptr, 3, nullptr, 0);
+    // xTaskCreatePinnedToCore(task, "test task", 2048, nullptr, 3, nullptr, 0);
 }

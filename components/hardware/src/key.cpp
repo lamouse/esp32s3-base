@@ -1,5 +1,4 @@
 #include "key.hpp"
-#include "driver/gptimer.h"
 namespace hardware
 {
 
@@ -35,7 +34,7 @@ namespace hardware
             .direction = GPTIMER_COUNT_UP,
             .resolution_hz = 1000000
         };
-        gptimer_handle_t timer_handle{};
+
         gptimer_new_timer(&timer_conf, &timer_handle);
         gptimer_alarm_config_t timer_alarm_conf{
             .alarm_count = 1000,
@@ -64,6 +63,9 @@ namespace hardware
     }
     key::~key()
     {
+        gptimer_stop(timer_handle);
+        gptimer_disable(timer_handle);
+        gptimer_del_timer(timer_handle);
     }
 
 }

@@ -2,6 +2,8 @@
 #define KEY_HPP
 #include "driver/gpio.h"
 #include "freertos/FreeRTOS.h"
+#include "driver/gptimer.h"
+
 namespace hardware{
     enum class key_stat{
         put_down,
@@ -14,6 +16,7 @@ namespace hardware{
         gpio_num_t _gpio;
         bool _put_down;
         bool _put_up;
+        gptimer_handle_t timer_handle{};
     public:
         key(gpio_num_t gpio);
         key_stat get_state();
