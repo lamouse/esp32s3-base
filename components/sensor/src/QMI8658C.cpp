@@ -139,7 +139,7 @@ namespace sensor
     {
         QMI8658C_data data;
         auto status = register_read(static_cast<uint8_t>(qmi8658_reg::STATUS0), 1); // 读状态寄存器
-        ESP_LOGD(QMI8658C_LOG_TAG, "QMI8658C status %d", status[0]);
+        ESP_LOGI(QMI8658C_LOG_TAG, "QMI8658C status %d", status[0]);
 
         if (status[0] & 0x03)
         {
@@ -162,6 +162,7 @@ namespace sensor
 
     QMI8658C::~QMI8658C()
     {
+        i2c_driver_delete(_i2c_port);
     }
 
     std::vector<uint8_t> QMI8658C::register_read(uint8_t reg_addr, int size)

@@ -5,4 +5,5 @@ idf_component_register(SRC_DIRS "src"
                         esp_event
                         driver
                         freertos
+                        fatfs
                     )
