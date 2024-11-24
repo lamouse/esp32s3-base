@@ -23,6 +23,7 @@
 #include "key.hpp"
 #include "QMI8658C.hpp"
 #include "sd_card.hpp"
+#include "microphone.hpp"
 #include <fstream>
 
 static const char *TAG = "main";
@@ -38,41 +39,23 @@ void task(void *parameter)
     // vTaskDelay(pdMS_TO_TICKS(1000));
 
     hardware::key k(GPIO_NUM_0);
-    sensor::QMI8658C qmi(I2C_NUM_0, GPIO_NUM_1, GPIO_NUM_2, 400 * 1000);
-    for(int i = 0; i < 3; i++){
-        try
-        {
-            vTaskDelay(pdMS_TO_TICKS(500));
-            auto qmi_data = qmi.read();
-            ESP_LOGI(TAG, "test angle_x = %.1f  angle_y = %.1f angle_z = %.1f", qmi_data.x, qmi_data.y, qmi_data.z);
-        }
-        catch (const std::exception &e)
-        {
-            ESP_LOGE(TAG, "QMI8658C init err: %s", e.what());
-            ESP_LOGE(TAG, "restrat system....");
-            esp_restart();
-        }
-    }
-    hardware::sd_card sd(GPIO_NUM_47, GPIO_NUM_48, GPIO_NUM_21);
-    std::ofstream osf;
-    osf.open(sd.get_mount_point() + "/test.txt");
-    if(!osf.is_open()){
-        ESP_LOGE(TAG, "osf open file fail");
-    }else{
-        osf << "1234556" << std::endl;
-    }
-    osf.close();
+    // sensor::QMI8658C qmi(I2C_NUM_0, GPIO_NUM_1, GPIO_NUM_2, 400 * 1000);
+    // for(int i = 0; i < 3; i++){
+    //     try
+    //     {
+    //         vTaskDelay(pdMS_TO_TICKS(500));
+    //         auto qmi_data = qmi.read();
+    //         ESP_LOGI(TAG, "test angle_x = %.1f  angle_y = %.1f angle_z = %.1f", qmi_data.x, qmi_data.y, qmi_data.z);
+    //     }
+    //     catch (const std::exception &e)
+    //     {
+    //         ESP_LOGE(TAG, "QMI8658C init err: %s", e.what());
+    //         ESP_LOGE(TAG, "restrat system....");
+    //         esp_restart();
+    //     }
+    // }
 
-    std::ifstream ifs;
-    ifs.open(sd.get_mount_point() + "/test.txt");
 
-    if(!ifs.is_open()){
-        ESP_LOGE(TAG, "ifs open file fail");
-    }else{
-        std::string ret;
-        ifs >> ret;
-        ESP_LOGE(TAG, "ifs read %s from file", ret.c_str());
-    }
 
     while (1)
     {
@@ -93,8 +76,8 @@ void task(void *parameter)
         }
         try
         {
-            auto qmi_data = qmi.read();
-            ESP_LOGI(TAG, "angle_x = %.1f  angle_y = %.1f angle_z = %.1f", qmi_data.x, qmi_data.y, qmi_data.z);
+            //auto qmi_data = qmi.read();
+            //ESP_LOGI(TAG, "angle_x = %.1f  angle_y = %.1f angle_z = %.1f", qmi_data.x, qmi_data.y, qmi_data.z);
         }
         catch (const std::exception &e)
         {
@@ -107,6 +90,8 @@ void task(void *parameter)
 extern "C" void app_main(void)
 {
     device::wifi wifi("showmeyourbp", "WW6639270");
+    hardware::sd_card sd(GPIO_NUM_47, GPIO_NUM_48, GPIO_NUM_21);
+    hardware::microphone mic;
     task(nullptr);
     // xTaskCreatePinnedToCore(task, "test task", 2048, nullptr, 3, nullptr, 0);
 }

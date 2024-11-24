@@ -14,7 +14,7 @@ namespace hardware{
         sdmmc_card_t *card;
     public:
         sd_card(gpio_num_t clk, gpio_num_t cmd, gpio_num_t d0);
-        std::string get_mount_point();
+        static std::string get_mount_point();
         ~sd_card();
     };
 
