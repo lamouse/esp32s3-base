@@ -3,3 +3,4 @@
 /.devcontainer
 /.vscode
 .DS_Store
+/managed_components
