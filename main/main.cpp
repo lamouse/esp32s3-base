@@ -25,6 +25,8 @@
 #include "sd_card.hpp"
 #include "microphone.hpp"
 #include <fstream>
+#include "audio.hpp"
+#include "PCA9557.hpp"
 
 static const char *TAG = "main";
 
@@ -37,7 +39,9 @@ void task(void *parameter)
     // display::screen screen;
     // lv_demo_widgets();
     // vTaskDelay(pdMS_TO_TICKS(1000));
-
+    hardware::audio audio;
+    hardware::PCA9557 pca;
+    pca.set_state(PA_EN_GPIO, 1);
     hardware::key k(GPIO_NUM_0);
     // sensor::QMI8658C qmi(I2C_NUM_0, GPIO_NUM_1, GPIO_NUM_2, 400 * 1000);
     // for(int i = 0; i < 3; i++){
@@ -55,8 +59,6 @@ void task(void *parameter)
     //     }
     // }
 
-
-
     while (1)
     {
         vTaskDelay(pdMS_TO_TICKS(1000));
@@ -72,12 +74,14 @@ void task(void *parameter)
             break;
         case hardware::key_stat::put_up:
             printf("----key put up\n");
+
+            audio.i2s_music(nullptr);
             break;
         }
         try
         {
-            //auto qmi_data = qmi.read();
-            //ESP_LOGI(TAG, "angle_x = %.1f  angle_y = %.1f angle_z = %.1f", qmi_data.x, qmi_data.y, qmi_data.z);
+            // auto qmi_data = qmi.read();
+            // ESP_LOGI(TAG, "angle_x = %.1f  angle_y = %.1f angle_z = %.1f", qmi_data.x, qmi_data.y, qmi_data.z);
         }
         catch (const std::exception &e)
         {
@@ -90,8 +94,9 @@ void task(void *parameter)
 extern "C" void app_main(void)
 {
     device::wifi wifi("showmeyourbp", "WW6639270");
-    hardware::sd_card sd(GPIO_NUM_47, GPIO_NUM_48, GPIO_NUM_21);
-    hardware::microphone mic;
+    // hardware::sd_card sd(GPIO_NUM_47, GPIO_NUM_48, GPIO_NUM_21);
+    // hardware::microphone mic;
+
     task(nullptr);
     // xTaskCreatePinnedToCore(task, "test task", 2048, nullptr, 3, nullptr, 0);
 }

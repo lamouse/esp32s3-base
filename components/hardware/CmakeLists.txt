@@ -6,4 +6,5 @@ idf_component_register(SRC_DIRS "src"
                         driver
                         freertos
                         fatfs
+                    EMBED_FILES "canon.pcm"
                     )
