@@ -2,6 +2,7 @@
 dependencies:
   espressif/es8311: "^1.0.0~1"
   espressif/es7210: "^1.0.1~1"
+  espressif/esp32-camera: "^2.0.10"
   ## Required IDF version
   idf:
     version: ">=4.1.0"

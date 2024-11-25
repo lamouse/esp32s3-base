@@ -5,12 +5,8 @@
 #include "driver/i2c.h"
 #include "driver//gpio.h"
 #include "esp_lcd_types.h"
-#define LCD_SDA GPIO_NUM_1
-#define LCD_SCL GPIO_NUM_2
-#define LCD_I2C_PORT I2C_NUM_0
-#define LCD_BACKLIGHT GPIO_NUM_42
+
 #define LCD_LEDC_CH (LEDC_CHANNEL_0)
-#define LCD_RST
 /* LCD display definition */
 #define LCD_H_RES              (320)
 #define LCD_V_RES              (240)
@@ -49,18 +45,15 @@ namespace display
     class screen
     {
     private:
-        static screen *_instance;
-        esp_lcd_panel_handle_t _panel_handle = nullptr;
-        esp_lcd_panel_io_handle_t _io_handle = nullptr;
-        void lv_display_init(void);
-        void disp_flush(lv_disp_drv_t *disp_drv, const lv_area_t *area, lv_color_t *color_p);
-
     public:
         screen();
 
         void lcd_set_color(uint16_t color);
         void lcd_draw_pictrue(int x_start, int y_start, int x_end, int y_end, const unsigned char *gImage);
+        void draw_bitmap(int x_start, int y_start, int x_end, int y_end, const void *color_data);
+        void set_brightness(int brightness);
         ~screen();
+
     };
 
 }

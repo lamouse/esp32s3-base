@@ -29,8 +29,46 @@
 #include "PCA9557.hpp"
 #include "screen.hpp"
 #include "yingwu.h"
+#include "camera.hpp"
+#include "esp_lcd_panel_ops.h"
+#include "system.hpp"
 
 static const char *TAG = "main";
+// 定义lcd显示队列句柄
+static QueueHandle_t xQueueLCDFrame = NULL;
+// lcd处理任务
+static void task_process_lcd(void *arg)
+{
+    std::shared_ptr<hardware::camera::camera_frame> frame_ptr;
+    display::screen *scren = static_cast<display::screen *>(arg);
+    while (true)
+    {
+        if (xQueueReceive(xQueueLCDFrame, &frame_ptr, portMAX_DELAY))
+        {
+            auto frame = frame_ptr;
+            if (frame_ptr->get())
+            {
+                scren->draw_bitmap(0, 0, frame_ptr->get()->width, frame_ptr->get()->height, (uint16_t *)frame_ptr->get()->buf);
+            }
+        }
+    }
+}
+
+// 摄像头处理任务
+static void task_process_camera(void *arg)
+{
+
+    hardware::camera *camera = static_cast<hardware::camera *>(arg);
+
+    while (true)
+    {
+        camera->frame_process([](auto d){
+                        long t = d.use_count();
+                        xQueueSend(xQueueLCDFrame, &d, portMAX_DELAY);
+                        while (d.use_count() == t);
+                    });
+    }
+}
 
 void task(void *parameter)
 {
@@ -77,7 +115,7 @@ void task(void *parameter)
         case hardware::key_stat::put_up:
             printf("----key put up\n");
 
-            //audio.i2s_music(nullptr);
+            // audio.i2s_music(nullptr);
             break;
         }
         try
@@ -95,11 +133,19 @@ void task(void *parameter)
 
 extern "C" void app_main(void)
 {
-    device::wifi wifi("showmeyourbp", "WW6639270");
-    // hardware::sd_card sd(GPIO_NUM_47, GPIO_NUM_48, GPIO_NUM_21);
-    // hardware::microphone mic;
+    // device::wifi wifi("showmeyourbp", "WW6639270");
+    //  hardware::sd_card sd(GPIO_NUM_47, GPIO_NUM_48, GPIO_NUM_21);
+    //  hardware::microphone mic;
+    app::init();
     display::screen scr;
     scr.lcd_draw_pictrue(0, 0, 320, 240, gImage_yingwu); // 显示3只鹦鹉图片
+    vTaskDelay(pdMS_TO_TICKS(500));
+
+    hardware::camera camera;
+    xQueueLCDFrame = xQueueCreate(2, sizeof(std::shared_ptr<hardware::camera::camera_frame>));
+    xTaskCreatePinnedToCore(task_process_camera, "task_process_camera", 3 * 1024, &camera, 5, NULL, 1);
+    xTaskCreatePinnedToCore(task_process_lcd, "task_process_lcd", 4 * 1024, &scr, 5, NULL, 0);
+
     task(nullptr);
     // xTaskCreatePinnedToCore(task, "test task", 2048, nullptr, 3, nullptr, 0);
 }

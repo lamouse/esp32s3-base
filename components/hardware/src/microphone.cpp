@@ -9,8 +9,8 @@
 #include "format_wav.h"
 #include "driver/gpio.h"
 #include "sd_card.hpp"
+#include "i2c.hpp"
 #include <fstream>
-#include <filesystem>
 #include <chrono>
 
 #define EXAMPLE_I2C_NUM I2C_NUM_0
@@ -33,7 +33,7 @@
 #define EXAMPLE_I2S_TDM_SLOT_MASK (I2S_TDM_SLOT0 | I2S_TDM_SLOT1)
 
 /* ES7210 configurations */
-#define EXAMPLE_ES7210_I2C_ADDR (0x41)
+#define ES7210_I2C_ADDR (0x41)
 #define EXAMPLE_ES7210_I2C_CLK (100000)
 #define EXAMPLE_ES7210_MIC_GAIN (ES7210_MIC_GAIN_30DB)
 #define EXAMPLE_ES7210_MIC_BIAS (ES7210_MIC_BIAS_2V87)
@@ -68,20 +68,12 @@ namespace hardware
     void es7210_codec_init(void)
     {
         ESP_LOGI(MICROPHONE_TAG, "Init I2C used to configure ES7210");
-        i2c_config_t i2c_conf = {
-            .mode = I2C_MODE_MASTER,
-            .sda_io_num = EXAMPLE_I2C_SDA_IO,
-            .scl_io_num = EXAMPLE_I2C_SCL_IO,
-            .sda_pullup_en = GPIO_PULLUP_ENABLE,
-            .scl_pullup_en = GPIO_PULLUP_ENABLE,
-            .master = {.clk_speed = EXAMPLE_ES7210_I2C_CLK}};
-        ESP_ERROR_CHECK(i2c_param_config(EXAMPLE_I2C_NUM, &i2c_conf));
-        ESP_ERROR_CHECK(i2c_driver_install(EXAMPLE_I2C_NUM, i2c_conf.mode, 0, 0, 0));
+        i2c_master i2c;
         /* Create ES7210 device handle */
         es7210_dev_handle_t es7210_handle = NULL;
         es7210_i2c_config_t es7210_i2c_conf = {
-            .i2c_port = EXAMPLE_I2C_NUM,
-            .i2c_addr = EXAMPLE_ES7210_I2C_ADDR};
+            .i2c_port = I2C_MASTER_PORT,
+            .i2c_addr = ES7210_I2C_ADDR};
         ESP_ERROR_CHECK(es7210_new_codec(&es7210_i2c_conf, &es7210_handle));
 
         ESP_LOGI(MICROPHONE_TAG, "Configure ES7210 codec parameters");

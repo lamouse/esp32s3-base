@@ -7,6 +7,7 @@
 #include "esp_system.h"
 #include "esp_check.h"
 #include "es8311.h"
+#include "i2c.hpp"
 
 static const char *AUDIO_TAG = "audio";
 extern const uint8_t music_pcm_start[] asm("_binary_canon_pcm_start");
@@ -24,17 +25,7 @@ namespace hardware
             ESP_LOGE(AUDIO_TAG, "i2s driver init failed");
             return;
         }
-        /* Initialize I2C peripheral */
-        const i2c_config_t es_i2c_cfg = {
-            .mode = I2C_MODE_MASTER,
-            .sda_io_num = I2C_SDA_IO,
-            .scl_io_num = I2C_SCL_IO,
-            .sda_pullup_en = GPIO_PULLUP_ENABLE,
-            .scl_pullup_en = GPIO_PULLUP_ENABLE,
-            .master = {.clk_speed = 100000},
-        };
-        ESP_ERROR_CHECK(i2c_param_config(I2C_NUM, &es_i2c_cfg));
-        ESP_ERROR_CHECK(i2c_driver_install(I2C_NUM, I2C_MODE_MASTER, 0, 0, 0));
+        i2c_master i2c;
 
         /* Initialize es8311 codec */
         es8311_handle_t es_handle = es8311_create(I2C_NUM, ES8311_ADDRRES_0);
