@@ -14,4 +14,36 @@ menu "wifi Configuration"
             Enable this to scan only the non overlapping channels i.e 1,6,11 by mentioning a channel bitmap
             in scan config. If you wish to scan a different set of specific channels, please edit the channel_list
             array in scan.c. Channels for a 2.4 ghz network range should range from 1-14.
+    config AP_MODE
+        bool "Enable WiFi Access Point Mode"
+        default 0
+        help
+            Enable this to run ESP32 as WiFi Access Point. If enabled, the ESP32 will create a WiFi network with the SSID and password specified in AP_MODE_SSID and AP_MODE_PASSWORD.
+    config AP_MODE_SSID
+        depends on AP_MODE
+        string "WiFi SSID"
+        default "esp32-s3"
+        help
+            The SSID of the ESP32 WiFi Access Point.
+    config AP_MODE_PASSWORD
+        depends on AP_MODE
+        string "WiFi Password"
+        default "123456789"
+        help
+            The password of the ESP32 WiFi Access Point.
+    config AP_MODE_CHANNEL
+        depends on AP_MODE
+        int "Default ap channel"
+        range 1 13
+        default 1
+        help 
+            "Channel to use for the ESP32 WiFi Access Point."
+    config AP_MODE_MAX_CONNECTIONS
+        depends on AP_MODE
+        int "Default max connections"
+        range 1 8
+        default 4
+        help 
+            "Maximum number of connections allowed for the ESP32 WiFi Access Point."    
+
 endmenu
