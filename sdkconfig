@@ -2328,6 +2328,13 @@ CONFIG_LV_USE_DEMO_MUSIC=y
 # end of LVGL configuration
 
 #
+# wifi Configuration
+#
+CONFIG_WIFI_SCAN_LIST_SIZE=10
+# CONFIG_WIFI_USE_SCAN_CHANNEL_BITMAP is not set
+# end of wifi Configuration
+
+#
 # Camera configuration
 #
 CONFIG_OV7670_SUPPORT=y

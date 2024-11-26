@@ -135,7 +135,8 @@ void task(void *parameter)
 
 extern "C" void app_main(void)
 {
-    // device::wifi wifi("showmeyourbp", "WW6639270");
+    device::wifi wifi;
+    wifi.scan();
     //  hardware::sd_card sd(GPIO_NUM_47, GPIO_NUM_48, GPIO_NUM_21);
     //  hardware::microphone mic;
     app::init();
