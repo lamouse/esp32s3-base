@@ -32,6 +32,8 @@
 #include "camera.hpp"
 #include "esp_lcd_panel_ops.h"
 #include "system.hpp"
+#include "demos/lv_demos.h"
+#include "wifi_app.hpp"
 
 static const char *TAG = "main";
 // 定义lcd显示队列句柄
@@ -138,14 +140,14 @@ extern "C" void app_main(void)
     //  hardware::microphone mic;
     app::init();
     display::screen scr;
-    scr.lcd_draw_pictrue(0, 0, 320, 240, gImage_yingwu); // 显示3只鹦鹉图片
-    vTaskDelay(pdMS_TO_TICKS(500));
-
-    hardware::camera camera;
-    xQueueLCDFrame = xQueueCreate(2, sizeof(std::shared_ptr<hardware::camera::camera_frame>));
-    xTaskCreatePinnedToCore(task_process_camera, "task_process_camera", 3 * 1024, &camera, 5, NULL, 1);
-    xTaskCreatePinnedToCore(task_process_lcd, "task_process_lcd", 4 * 1024, &scr, 5, NULL, 0);
-
+    // scr.lcd_draw_pictrue(0, 0, 320, 240, gImage_yingwu); // 显示3只鹦鹉图片
+    // vTaskDelay(pdMS_TO_TICKS(500));
+    //app::app_wifi_connect();
+    // hardware::camera camera;
+    // xQueueLCDFrame = xQueueCreate(2, sizeof(std::shared_ptr<hardware::camera::camera_frame>));
+    // xTaskCreatePinnedToCore(task_process_camera, "task_process_camera", 3 * 1024, &camera, 5, NULL, 1);
+    // xTaskCreatePinnedToCore(task_process_lcd, "task_process_lcd", 4 * 1024, &scr, 5, NULL, 0);
+    lv_demo_benchmark();
     task(nullptr);
     // xTaskCreatePinnedToCore(task, "test task", 2048, nullptr, 3, nullptr, 0);
 }

@@ -10,6 +10,7 @@
 /* LCD display definition */
 #define LCD_H_RES              (320)
 #define LCD_V_RES              (240)
+#define LCD_DRAW_BUFF_HIGHT     (20)
 #define LCD_DRAW_BUFF_SIZE     (LCD_H_RES * LCD_V_RES)
 
 /* LCD color formats */
@@ -45,9 +46,10 @@ namespace display
     class screen
     {
     private:
+        lv_disp_t *bsp_display_lcd_init();
     public:
         screen();
-
+        void lvgl_start(void);
         void lcd_set_color(uint16_t color);
         void lcd_draw_pictrue(int x_start, int y_start, int x_end, int y_end, const unsigned char *gImage);
         void draw_bitmap(int x_start, int y_start, int x_end, int y_end, const void *color_data);
