@@ -7,4 +7,5 @@ idf_component_register(SRC_DIRS "src"
                         freertos
                         fatfs
                         esp_lcd
+                        wifi
                     )
