@@ -1,0 +1,27 @@
+menu "screen Configuration"
+
+    config LCD_H_RES
+        int "LCD horizontal resolution"
+        default 320
+        help 
+            "This is the horizontal resolution of the LCD."
+
+    config LCD_V_RES
+        int "LCD vertical resolution"
+        default 240
+        help 
+            "This is the vertical resolution of the LCD."
+
+    config LCD_CMD_BITS
+        int "LCD command bits"
+        default 8
+        help 
+            "This is the number of bits used to send commands to the LCD."
+
+    config LCD_PARAM_BITS
+        int "LCD parameter bits"
+        default 8
+        help 
+            "This is the number of bits used to send parameters to the LCD."
+
+endmenu
