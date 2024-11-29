@@ -5,3 +5,4 @@ idf_component_register(SRC_DIRS "src"
                         esp_event
                         nvs_flash
                     )
+add_compile_options(-Wno-missing-field-initializers)
