@@ -18,8 +18,14 @@
 
 
 lv_disp_drv_t disp_drv;
-#define LCD_WIDTH 320
-#define LCD_HEIGHT 240
+#define LCD_H_RES CONFIG_LCD_H_RES
+#define LCD_V_RES CONFIG_LCD_V_RES
+
+#define LCD_CMD_BITS         CONFIG_LCD_CMD_BITS
+#define LCD_PARAM_BITS       CONFIG_LCD_PARAM_BITS
+
+/* LCD display color bits */
+#define LCD_BITS_PER_PIXEL      CONFIG_LCD_BITS_PER_PIXEL
 static const char *TAG = "screen";
 namespace display
 {
@@ -117,7 +123,9 @@ namespace display
 			pca.set_state(LCD_CS_GPIO, 0);
 			esp_lcd_panel_init(_panel_handle);
 			esp_lcd_panel_invert_color(_panel_handle, true);
+#if CONFIG_LCD_SWAP_XY
 			esp_lcd_panel_swap_xy(_panel_handle, true);		  // 显示翻转
+#endif
 			esp_lcd_panel_mirror(_panel_handle, true, false); // 镜像
 			return ret;
 		}

@@ -2328,6 +2328,17 @@ CONFIG_LV_USE_DEMO_MUSIC=y
 # end of LVGL configuration
 
 #
+# screen Configuration
+#
+CONFIG_LCD_H_RES=320
+CONFIG_LCD_V_RES=240
+CONFIG_LCD_CMD_BITS=8
+CONFIG_LCD_PARAM_BITS=8
+CONFIG_LCD_BITS_PER_PIXEL=16
+CONFIG_LCD_SWAP_XY=y
+# end of screen Configuration
+
+#
 # wifi Configuration
 #
 CONFIG_WIFI_SCAN_LIST_SIZE=10

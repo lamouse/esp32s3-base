@@ -8,8 +8,6 @@
 
 #define LCD_LEDC_CH (LEDC_CHANNEL_0)
 /* LCD display definition */
-#define LCD_H_RES              (320)
-#define LCD_V_RES              (240)
 #define LCD_DRAW_BUFF_HIGHT     (20)
 #define LCD_DRAW_BUFF_SIZE     (LCD_H_RES * LCD_V_RES)
 
@@ -17,15 +15,9 @@
 #define ESP_LCD_COLOR_FORMAT_RGB565    (1)
 #define ESP_LCD_COLOR_FORMAT_RGB888    (2)
 
-/* LCD display color bits */
-#define LCD_BITS_PER_PIXEL      (16)
+
 /* LCD display color space */
 #define LCD_COLOR_SPACE         (LCD_RGB_ENDIAN_RGB)
-
-
-
-#define LCD_CMD_BITS         (8)
-#define LCD_PARAM_BITS       (8)
 
 #define LCD_PIXEL_CLOCK_HZ     (80 * 1000 * 1000)
 
