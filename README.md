@@ -9,3 +9,7 @@
     $newPath ="D:\libs\esp32\tools\python_env\idf5.3_py3.11_env\Scripts"
     $env:PATH ="$newPath;$currentPath"
 ```
+
+### tools目录
+
+- move_files.py 主要将SquareLine Studio或者gui guider 生成的代码移动到符合当前项目结构的目录，并修改对应的include路径

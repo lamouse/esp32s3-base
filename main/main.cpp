@@ -32,7 +32,8 @@
 #include <fstream>
 #include <inttypes.h>
 #include <stdio.h>
-#include <widgets/lv_demo_widgets.h>
+//#include <widgets/lv_demo_widgets.h>
+#include "ui.h"
 
 static const char *TAG = "main";
 // 定义lcd显示队列句柄
@@ -128,7 +129,7 @@ void task(void *parameter) {
 extern "C" void app_main(void) {
   //  hardware::sd_card sd(GPIO_NUM_47, GPIO_NUM_48, GPIO_NUM_21);
   //  hardware::microphone mic;
-  app::init();
+  // app::init();
   display::screen scr;
   //app::app_wifi_connect();
 
@@ -142,7 +143,8 @@ extern "C" void app_main(void) {
   // 1024, &camera, 5, NULL, 1); xTaskCreatePinnedToCore(task_process_lcd,
   // "task_process_lcd", 4 * 1024, &scr, 5, NULL, 0);
   // lv_demo_benchmark();
-  lv_demo_widgets();
+  //lv_demo_widgets();
+  ui_init();
   task(nullptr);
   // xTaskCreatePinnedToCore(task, "test task", 2048, nullptr, 3, nullptr, 0);
 }

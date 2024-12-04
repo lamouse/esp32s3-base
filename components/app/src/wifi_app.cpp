@@ -477,7 +477,7 @@ void app_wifi_connect(void) {
     ESP_LOGI(TAG, "SSID \t\t%s", ap.ssid); // 终端输出wifi名称
     ESP_LOGI(TAG, "RSSI \t\t%d", ap.rssi); // 终端输出wifi信号质量
     // 添加wifi列表
-    btn = lv_list_add_btn(wifi_list, LV_SYMBOL_WIFI, (const char *)ap.ssid);
+      btn = lv_list_add_btn(wifi_list, LV_SYMBOL_WIFI, (const char *)ap.ssid);
     lv_obj_add_event_cb(btn, list_btn_cb, LV_EVENT_CLICKED,
                         NULL); // 添加点击回调函数
   }
