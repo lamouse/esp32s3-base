@@ -4,13 +4,23 @@
 // Project name: SquareLine_Project
 
 #include "ui.h"
+#include <stdio.h>
+#include "ui.h"
 
 void wifi_connect(lv_event_t * e)
 {
-	// Your code here
+	const char* wifi_password = lv_textarea_get_text(uic_wifi_password);
+	printf("Connect to wifi pwd = %s\n", wifi_password);
 }
 
 void key_yes_event(lv_event_t * e)
 {
-	// Your code here
+	printf("yes\n");
+}
+
+void key_put_up(lv_event_t * e)
+{
+	lv_event_code_t code = lv_event_get_code(e);
+	lv_key_t key = lv_event_get_key(e);
+	printf("put up %d, code %d\n", key, code);
 }

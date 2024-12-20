@@ -5,7 +5,7 @@
 
 #include "ui.h"
 #include "ui_helpers.h"
-
+#include "stdio.h"
 ///////////////////// VARIABLES ////////////////////
 
 
@@ -18,8 +18,11 @@ void ui_event_password(lv_event_t * e);
 lv_obj_t * ui_password;
 void ui_event_Keyboard1(lv_event_t * e);
 lv_obj_t * ui_Keyboard1;
+void ui_event_wificonne(lv_event_t * e);
+lv_obj_t * ui_wificonne;
 // CUSTOM VARIABLES
 lv_obj_t * uic_wifi_password;
+lv_obj_t * uic_wifi;
 
 // EVENTS
 lv_obj_t * ui____initial_actions0;
@@ -58,9 +61,18 @@ void ui_event_password(lv_event_t * e)
 void ui_event_Keyboard1(lv_event_t * e)
 {
     lv_event_code_t event_code = lv_event_get_code(e);
+    printf("ui_event_Keyboard1 = %d\n", event_code);
+    if(event_code == LV_EVENT_VALUE_CHANGED) {
+        key_put_up(e);
+    }
+}
+
+void ui_event_wificonne(lv_event_t * e)
+{
+    lv_event_code_t event_code = lv_event_get_code(e);
 
     if(event_code == LV_EVENT_CLICKED) {
-        _ui_keyboard_set_target(ui_Keyboard1,  ui_password);
+        wifi_connect(e);
     }
 }
 

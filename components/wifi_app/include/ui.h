@@ -27,8 +27,11 @@ void ui_event_password(lv_event_t * e);
 extern lv_obj_t * ui_password;
 void ui_event_Keyboard1(lv_event_t * e);
 extern lv_obj_t * ui_Keyboard1;
+void ui_event_wificonne(lv_event_t * e);
+extern lv_obj_t * ui_wificonne;
 // CUSTOM VARIABLES
 extern lv_obj_t * uic_wifi_password;
+extern lv_obj_t * uic_wifi;
 
 // EVENTS
 

@@ -10,6 +10,7 @@
 extern "C" {
 #endif
 
+void key_put_up(lv_event_t * e);
 void wifi_connect(lv_event_t * e);
 void key_yes_event(lv_event_t * e);
 

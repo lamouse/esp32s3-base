@@ -13,8 +13,6 @@ void ui_wificonnect_screen_init(void)
     ui_Panel1 = lv_obj_create(ui_wificonnect);
     lv_obj_set_width(ui_Panel1, 320);
     lv_obj_set_height(ui_Panel1, 240);
-    lv_obj_set_x(ui_Panel1, 0);
-    lv_obj_set_y(ui_Panel1, -3);
     lv_obj_set_align(ui_Panel1, LV_ALIGN_CENTER);
     lv_obj_clear_flag(ui_Panel1, LV_OBJ_FLAG_SCROLLABLE);      /// Flags
 
@@ -38,15 +36,26 @@ void ui_wificonnect_screen_init(void)
     lv_obj_set_width(ui_Keyboard1, 320);
     lv_obj_set_height(ui_Keyboard1, 120);
     lv_obj_set_x(ui_Keyboard1, 0);
-    lv_obj_set_y(ui_Keyboard1, 55);
+    lv_obj_set_y(ui_Keyboard1, 56);
     lv_obj_set_align(ui_Keyboard1, LV_ALIGN_CENTER);
-    lv_obj_set_flex_flow(ui_Keyboard1, LV_FLEX_FLOW_ROW);
-    lv_obj_set_flex_align(ui_Keyboard1, LV_FLEX_ALIGN_START, LV_FLEX_ALIGN_START, LV_FLEX_ALIGN_START);
     lv_obj_add_flag(ui_Keyboard1, LV_OBJ_FLAG_HIDDEN);     /// Flags
+
+    ui_wificonne = lv_btn_create(ui_wificonnect);
+    lv_obj_set_width(ui_wificonne, 53);
+    lv_obj_set_height(ui_wificonne, 38);
+    lv_obj_set_x(ui_wificonne, 119);
+    lv_obj_set_y(ui_wificonne, -39);
+    lv_obj_set_align(ui_wificonne, LV_ALIGN_CENTER);
+    lv_obj_add_flag(ui_wificonne, LV_OBJ_FLAG_SCROLL_ON_FOCUS);     /// Flags
+    lv_obj_clear_flag(ui_wificonne, LV_OBJ_FLAG_SCROLLABLE);      /// Flags
+    lv_obj_set_style_text_font(ui_wificonne, &ui_font_ali, LV_PART_MAIN | LV_STATE_DEFAULT);
 
     lv_obj_add_event_cb(ui_Panel1, ui_event_Panel1, LV_EVENT_ALL, NULL);
     lv_obj_add_event_cb(ui_password, ui_event_password, LV_EVENT_ALL, NULL);
+    lv_keyboard_set_textarea(ui_Keyboard1, ui_password);
     lv_obj_add_event_cb(ui_Keyboard1, ui_event_Keyboard1, LV_EVENT_ALL, NULL);
+    lv_obj_add_event_cb(ui_wificonne, ui_event_wificonne, LV_EVENT_ALL, NULL);
     uic_wifi_password = ui_password;
+    uic_wifi = ui_wificonne;
 
 }
